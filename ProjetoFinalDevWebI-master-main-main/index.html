@@ -3,28 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FilmSelect</title>
+    <title>Gatos</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="Icon" href="img/logo.svg" type="image/Icon">
 </head>
 <body>
     <header>
-        <div class="wrapper">
-          <a href="index.html" class="logotype">
-            <img src="img/movie-camera-svgrepo-com.svg" alt="LogoProjeto">
-            <h1>FilmSelect</h1>
-          </a>
-        </div>
-    </header>
-    <div class="main">
-        <div class="coluna">
-          <button type="edit" id="gerargif">Gerar GIF aleatório </button> 
-          <button type="edit" id="limpar">Limpar</button>
-        </div>
-        <div class="card1" id="content">
-           <img src="" alt="" id="catgif">   
-        </div>   
+        <div class="wrapper"></div>
+        <a href="index.html" class="logotype"></a>
+        <img src="img/cat-svgrepo-com (1).svg" alt="logo">
+    <h1>CatSearch</h1>
+    </a>
     </div>
+    </header>
+    <div id="cards"></div>
+    <button id="load">Carregar Gatos</button>
+    <button id="clear">Limpar Gatos</button>
+
+    <script>
+        //* fetch das apis
+        document.getElementById('load').addEventListener('click', function() {
+            fetch('https://catfact.ninja/fact')
+                .then(response => response.json())
+                .then(data => {
+                    const fact = data.fact;
+
+                    fetch('https://api.thecatapi.com/v1/images/search')
+                        .then(response => response.json())
+                        .then(data => {
+                            const gifUrl = data[0].url;
+
+//Procurand um gif de gato e inserindo ao ativar o botão.
+
+                            const card = document.createElement('div');
+                            card.innerHTML = `
+                                <img src="${gifUrl}" alt="GIF de gato">
+                                <p>${fact}</p>
+                            `;
+
+//querySelector
+
+                            const cardsContainer = document.querySelector('#cards');
+                            cardsContainer.appendChild(card);
+                        })
+                        .catch(error => console.error(error));
+                })
+                .catch(error => console.error(error));
+        });
+
+        document.getElementById('clear').addEventListener('click', function() {
+            const cardsContainer = document.querySelector('#cards');
+            cardsContainer.innerHTML = '';
+        });
+    </script>
 </body>
-<script src="script.js"></script>
 </html>
